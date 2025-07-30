@@ -1,0 +1,85 @@
+[debug] [2025-07-30T03:28:33.899Z] ----------------------------------------------------------------------
+[debug] [2025-07-30T03:28:33.902Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SonDH\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init functions
+[debug] [2025-07-30T03:28:33.903Z] CLI Version:   14.11.1
+[debug] [2025-07-30T03:28:33.903Z] Platform:      win32
+[debug] [2025-07-30T03:28:33.903Z] Node Version:  v22.16.0
+[debug] [2025-07-30T03:28:33.904Z] Time:          Wed Jul 30 2025 10:28:33 GMT+0700 (Indochina Time)
+[debug] [2025-07-30T03:28:33.904Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-07-30T03:28:34.188Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-07-30T03:28:34.189Z] > authorizing via signed-in user (hs5011@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  E:\cursor\QL_LichKhamBenh\ql-lichkham
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2025-07-30T03:28:40.578Z] Using project from CLI flag: ql-lichkham
+[debug] [2025-07-30T03:28:40.579Z] Checked if tokens are valid: true, expires at: 1753849318949
+[debug] [2025-07-30T03:28:40.579Z] Checked if tokens are valid: true, expires at: 1753849318949
+[debug] [2025-07-30T03:28:40.580Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/ql-lichkham [none]
+[debug] [2025-07-30T03:28:41.516Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/ql-lichkham 200
+[debug] [2025-07-30T03:28:41.516Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/ql-lichkham {"projectId":"ql-lichkham","projectNumber":"367560609699","displayName":"QL-LichKham","name":"projects/ql-lichkham","resources":{"hostingSite":"ql-lichkham"},"state":"ACTIVE","etag":"1_823cfcfa-9c19-4073-a665-5a29fd4d5e15"}
+[info] i  Using project ql-lichkham (QL-LichKham) 
+[info] 
+=== Functions Setup
+[debug] [2025-07-30T03:28:41.527Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-07-30T03:28:41.527Z] > authorizing via signed-in user (hs5011@gmail.com)
+[debug] [2025-07-30T03:28:41.528Z] [iam] checking project ql-lichkham for permissions ["firebase.projects.get"]
+[debug] [2025-07-30T03:28:41.528Z] Checked if tokens are valid: true, expires at: 1753849318949
+[debug] [2025-07-30T03:28:41.528Z] Checked if tokens are valid: true, expires at: 1753849318949
+[debug] [2025-07-30T03:28:41.528Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/ql-lichkham:testIamPermissions [none]
+[debug] [2025-07-30T03:28:41.528Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/ql-lichkham:testIamPermissions x-goog-quota-user=projects/ql-lichkham
+[debug] [2025-07-30T03:28:41.528Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/ql-lichkham:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2025-07-30T03:28:43.160Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/ql-lichkham:testIamPermissions 200
+[debug] [2025-07-30T03:28:43.160Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/ql-lichkham:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2025-07-30T03:28:43.162Z] Checked if tokens are valid: true, expires at: 1753849318949
+[debug] [2025-07-30T03:28:43.162Z] Checked if tokens are valid: true, expires at: 1753849318949
+[debug] [2025-07-30T03:28:43.163Z] Checked if tokens are valid: true, expires at: 1753849318949
+[debug] [2025-07-30T03:28:43.163Z] Checked if tokens are valid: true, expires at: 1753849318949
+[debug] [2025-07-30T03:28:43.163Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/cloudfunctions.googleapis.com [none]
+[debug] [2025-07-30T03:28:43.163Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/ql-lichkham
+[debug] [2025-07-30T03:28:43.166Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/runtimeconfig.googleapis.com [none]
+[debug] [2025-07-30T03:28:43.167Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/ql-lichkham
+[debug] [2025-07-30T03:28:44.595Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/runtimeconfig.googleapis.com 200
+[debug] [2025-07-30T03:28:44.595Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2025-07-30T03:28:44.601Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/cloudfunctions.googleapis.com 200
+[debug] [2025-07-30T03:28:44.602Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2025-07-30T03:28:44.602Z] Checked if tokens are valid: true, expires at: 1753849318949
+[debug] [2025-07-30T03:28:44.602Z] Checked if tokens are valid: true, expires at: 1753849318949
+[debug] [2025-07-30T03:28:44.602Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/cloudfunctions.googleapis.com:enable [none]
+[debug] [2025-07-30T03:28:44.602Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/cloudfunctions.googleapis.com:enable x-goog-quota-user=projects/ql-lichkham
+[debug] [2025-07-30T03:28:45.138Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/cloudfunctions.googleapis.com:enable 200
+[debug] [2025-07-30T03:28:45.138Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/ql-lichkham/services/cloudfunctions.googleapis.com:enable [omitted]
+[info] 
+Detected existing codebase(s): default
+
+[debug] [2025-07-30T03:29:57.630Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (C:\Users\SonDH\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\@inquirer\core\dist\commonjs\lib\create-prompt.js:101:37)
+    at Interface.emit (node:events:518:28)
+    at Interface.emit (node:domain:489:12)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1128:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:267:20)
+    at ReadStream.emit (node:events:530:35)
+    at ReadStream.emit (node:domain:489:12)
+    at emitKeys (node:internal/readline/utils:370:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+[error] 
+[error] Error: An unexpected error has occurred.
