@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, where, orderBy, getDocs, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, orderBy, getDocs, getDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../services/firebase';
 
 const styles = {
@@ -216,7 +216,7 @@ function DoctorAppointmentManagement() {
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [filterStatus, setFilterStatus] = useState('');
-  const [filterClinic, setFilterClinics] = useState('');
+  const [filterClinic, setFilterClinic] = useState('');
   const [clinics, setClinics] = useState([]);
   const [showDetail, setShowDetail] = useState(false);
   const [detailData, setDetailData] = useState(null);
@@ -277,24 +277,18 @@ function DoctorAppointmentManagement() {
           
           // Lấy thông tin phòng khám
           if (appointment.clinicId) {
-            const clinicSnapshot = await getDocs(query(
-              collection(db, 'clinics'),
-              where('id', '==', appointment.clinicId)
-            ));
-            if (!clinicSnapshot.empty) {
-              appointment.clinic = clinicSnapshot.docs[0].data();
+            const clinicDoc = await getDoc(doc(db, 'clinics', appointment.clinicId));
+            if (clinicDoc.exists()) {
+              appointment.clinic = clinicDoc.data();
               console.log('Found clinic data:', appointment.clinic); // Debug log
             }
           }
           
           // Lấy thông tin khung giờ
           if (appointment.timeSlotId) {
-            const slotSnapshot = await getDocs(query(
-              collection(db, 'time_slots'),
-              where('id', '==', appointment.timeSlotId)
-            ));
-            if (!slotSnapshot.empty) {
-              appointment.slot = slotSnapshot.docs[0].data();
+            const slotDoc = await getDoc(doc(db, 'time_slots', appointment.timeSlotId));
+            if (slotDoc.exists()) {
+              appointment.slot = slotDoc.data();
               console.log('Found slot data:', appointment.slot); // Debug log
             }
           }
@@ -303,6 +297,8 @@ function DoctorAppointmentManagement() {
         }
         
         console.log('Fetched appointments:', appointmentsData); // Debug log
+        console.log('Total appointments loaded:', appointmentsData.length); // Debug log
+        console.log('Appointments with dates:', appointmentsData.map(a => ({ id: a.id, date: a.date, status: a.status }))); // Debug log
         setAppointments(appointmentsData);
       } catch (error) {
         console.error('Error fetching appointments:', error);
@@ -316,12 +312,27 @@ function DoctorAppointmentManagement() {
 
   // Lọc appointments theo ngày và điều kiện khác
   const filteredAppointments = appointments.filter(appointment => {
-    const appointmentDate = appointment.date;
-    const matchesDate = !selectedDate || appointmentDate === selectedDate;
+    console.log('Checking appointment:', appointment); // Debug log
+    
+    // Lọc theo ngày - chuyển đổi format để so sánh
+    let matchesDate = true;
+    if (selectedDate) {
+      const appointmentDate = appointment.date;
+      console.log('Appointment date:', appointmentDate, 'Selected date:', selectedDate); // Debug log
+      
+      // Chuyển đổi format ngày để so sánh
+      const appointmentDateFormatted = appointmentDate ? new Date(appointmentDate).toISOString().split('T')[0] : '';
+      matchesDate = appointmentDateFormatted === selectedDate;
+      console.log('Date match:', matchesDate); // Debug log
+    }
+    
     const matchesStatus = !filterStatus || appointment.status === filterStatus;
     const matchesClinic = !filterClinic || appointment.clinicId === filterClinic;
     
-    return matchesDate && matchesStatus && matchesClinic;
+    const result = matchesDate && matchesStatus && matchesClinic;
+    console.log('Final result for appointment:', appointment.id, result); // Debug log
+    
+    return result;
   });
 
   console.log('Filtered appointments:', filteredAppointments); // Debug log
@@ -485,7 +496,7 @@ function DoctorAppointmentManagement() {
                 <select 
                   style={styles.filterInput} 
                   value={filterClinic} 
-                  onChange={(e) => setFilterClinics(e.target.value)}
+                  onChange={(e) => setFilterClinic(e.target.value)}
                 >
                   <option value="">Tất cả</option>
                   {clinics.map(clinic => (
@@ -511,25 +522,43 @@ function DoctorAppointmentManagement() {
                       <li>Bộ lọc phòng khám</li>
                       <li>Admin đã duyệt lịch khám chưa</li>
                     </ul>
-                    <div style={{ marginTop: '20px' }}>
-                      <button 
-                        onClick={() => {
-                          setSelectedDate('');
-                          setFilterStatus('');
-                          setFilterClinic('');
-                        }}
-                        style={{
-                          padding: '10px 20px',
-                          backgroundColor: '#27ae60',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '4px',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Xóa bộ lọc
-                      </button>
-                    </div>
+                                         <div style={{ marginTop: '20px' }}>
+                       <button 
+                         onClick={() => {
+                           setSelectedDate('');
+                           setFilterStatus('');
+                           setFilterClinic('');
+                         }}
+                         style={{
+                           padding: '10px 20px',
+                           backgroundColor: '#27ae60',
+                           color: 'white',
+                           border: 'none',
+                           borderRadius: '4px',
+                           cursor: 'pointer',
+                           marginRight: '10px'
+                         }}
+                       >
+                         Xóa bộ lọc
+                       </button>
+                       <button 
+                         onClick={() => {
+                           console.log('All appointments:', appointments);
+                           console.log('All appointments count:', appointments.length);
+                           alert(`Tổng số lịch khám: ${appointments.length}`);
+                         }}
+                         style={{
+                           padding: '10px 20px',
+                           backgroundColor: '#3498db',
+                           color: 'white',
+                           border: 'none',
+                           borderRadius: '4px',
+                           cursor: 'pointer'
+                         }}
+                       >
+                         Xem tất cả ({appointments.length})
+                       </button>
+                     </div>
                   </div>
                 ) : (
                   <table style={styles.table}>
