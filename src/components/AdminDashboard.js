@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ApproveAppointments from "./ApproveAppointments";
 import ApproveIndividualAppointments from "./ApproveIndividualAppointments";
+import ApproveRescheduleRequests from "./ApproveRescheduleRequests";
 import ConfigClinics from "./ConfigClinics";
 import ConfigTimeSlots from "./ConfigTimeSlots";
 import ConfigWards from "./ConfigWards";
@@ -85,6 +86,7 @@ const LEFT_MENUS = [
   { key: 'users', label: 'Quản lý tài khoản' },
   { key: 'approve', label: 'Duyệt lịch khám (Phác đồ)' },
   { key: 'approve-individual', label: 'Duyệt từng buổi khám' },
+  { key: 'approve-reschedule', label: 'Duyệt yêu cầu dời lịch' },
   { key: 'config', label: 'Quản lý cấu hình' },
   { key: 'status', label: 'Quản lý trạng thái' },
   { key: 'stats', label: 'Thống kê cơ bản' },
@@ -164,6 +166,7 @@ function AdminDashboard() {
             {tabKey === 'users' && <UserManagement />}
             {tabKey === 'approve' && <ApproveAppointments />}
             {tabKey === 'approve-individual' && <ApproveIndividualAppointments />}
+            {tabKey === 'approve-reschedule' && <ApproveRescheduleRequests />}
             {tabKey === 'config' && (
               <>
                 <div style={styles.configTabs}>

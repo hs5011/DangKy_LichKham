@@ -196,24 +196,30 @@ function UserManagement() {
         });
         setMessage("Cập nhật thành công!");
       } else {
+        // Nếu admin nhập số điện thoại, tự chuyển thành email dạng sodienthoai@yourapp.com
+        let email = form.email;
+        const phoneRegex = /^\d{9,11}$/;
+        if (phoneRegex.test(form.email)) {
+          email = `${form.email}@yourapp.com`;
+        }
         // Gọi REST API Firebase Auth để tạo user
         const apiKey = "AIzaSyAw0mfgwDP1WSsgf_dzZR2XpUt0zGWIU4I";
         const resp = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: form.email, password: form.password, returnSecureToken: true })
+          body: JSON.stringify({ email: email, password: form.password, returnSecureToken: true })
         });
         const data = await resp.json();
         if (data.error) {
           setMessage("Lỗi tạo tài khoản Auth: " + data.error.message);
           return;
         }
-        await setDoc(doc(db, "users", form.email), {
+        await setDoc(doc(db, "users", email), {
           fullName: form.fullName,
           phone: form.phone,
           ward: form.ward,
           role: form.role,
-          email: form.email,
+          email: email,
         });
         setMessage("Thêm tài khoản thành công!");
       }
@@ -225,8 +231,50 @@ function UserManagement() {
 
   const handleDelete = async (u) => {
     try {
+      // Xóa user trên Firestore
       await deleteDoc(doc(db, "users", u.id));
-      setMessage("Đã xóa tài khoản!");
+      
+      // Xóa user trên Firebase Authentication
+      try {
+        const apiKey = "AIzaSyAw0mfgwDP1WSsgf_dzZR2XpUt0zGWIU4I";
+        const email = u.email || u.id; // Lấy email từ user data
+        
+        // Lấy UID của user từ email
+        const getUidResponse = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email })
+        });
+        
+        const uidData = await getUidResponse.json();
+        
+        if (uidData.users && uidData.users.length > 0) {
+          const uid = uidData.users[0].localId;
+          
+          // Xóa user bằng UID
+          const deleteResponse = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:delete?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ localId: uid })
+          });
+          
+          const deleteData = await deleteResponse.json();
+          
+          if (deleteData.error) {
+            console.warn("Không thể xóa user trên Authentication:", deleteData.error.message);
+            setMessage("Đã xóa tài khoản trên database, nhưng không thể xóa trên Authentication!");
+          } else {
+            setMessage("Đã xóa tài khoản hoàn toàn (cả database và Authentication)!");
+          }
+        } else {
+          console.warn("Không tìm thấy user trên Authentication");
+          setMessage("Đã xóa tài khoản trên database, nhưng không tìm thấy trên Authentication!");
+        }
+      } catch (authError) {
+        console.warn("Lỗi khi xóa user trên Authentication:", authError);
+        setMessage("Đã xóa tài khoản trên database, nhưng có lỗi khi xóa trên Authentication!");
+      }
+      
       setConfirmDelete(null);
     } catch (err) {
       setMessage("Lỗi: " + err.message);
@@ -278,14 +326,29 @@ function UserManagement() {
               <label style={styles.label}>Họ tên:</label>
               <input style={styles.input} name="fullName" value={form.fullName} onChange={handleChange} required />
               <label style={styles.label}>Số điện thoại:</label>
-              <input style={styles.input} name="phone" value={form.phone} onChange={handleChange} required />
-              <label style={styles.label}>Phường/Xã:</label>
-              <select style={styles.select} name="ward" value={form.ward} onChange={handleChange} required>
-                <option value="">Chọn phường/xã</option>
-                {wards.map(w => <option key={w} value={w}>{w}</option>)}
-              </select>
-              <label style={styles.label}>Email:</label>
-              <input style={styles.input} name="email" value={form.email} onChange={handleChange} required disabled={!!editUser} />
+              <input
+                style={styles.input}
+                name="phone"
+                value={form.phone}
+                onChange={e => {
+                  const phone = e.target.value;
+                  setForm(f => ({
+                    ...f,
+                    phone,
+                    // Nếu đang thêm mới, tự động sinh email
+                    email: !editUser && phone.match(/^\d{9,11}$/) ? `${phone}@yourapp.com` : (editUser ? f.email : '')
+                  }));
+                }}
+                required
+              />
+              <label style={styles.label}>Email (tự động):</label>
+              <input
+                style={styles.input}
+                name="email"
+                value={form.email}
+                readOnly
+                disabled
+              />
               {!editUser && (
                 <>
                   <label style={styles.label}>Mật khẩu:</label>
