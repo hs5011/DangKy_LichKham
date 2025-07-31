@@ -14,7 +14,7 @@ class FCMService {
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
         const token = await getToken(this.messaging, {
-          vapidKey: 'AIzaSyAw0mfgwDP1WSsgf_dzZR2XpUt0zGWIU4I' // VAPID key thực tế
+          vapidKey: 'BKsmKT61DVKTGKZ3YgrN14iSrUV5gnhzTiBxPhIx79uN7JAlWiPG-Y8RKdRdW1xsuEWHcjPVblf2lymn-hBZKqw' // VAPID key thực tế
         });
         
         if (token) {
